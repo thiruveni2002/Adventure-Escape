@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-image: url('img/1.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 220px;
+  }
+  .invitation {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 4px;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .invitation::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.6) 100%);
+    z-index: 1;
+    pointer-events: none;
+    animation: animateBackground 8s linear infinite;
+  }
+  @keyframes animateBackground {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .invitation h1 {
+    color: #007bff;
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .invitation p {
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+  .theme-toggle {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .theme-toggle button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 0 5px;
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-toggle button:hover {
+    background-color: #0056b3;
+  }
+  .theme-toggle button:focus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: ripple 0.6s linear;
+  }
+  @keyframes ripple {
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="invitation">
+    <h1 id="eventTitle">Adventure Escape</h1>
+    <p id="eventDescription">Join us for an exciting travel adventure!</p>
+    <p>Date: <span id="eventDate">July 1st, 2024</span></p>
+    <p>Location: <span id="eventLocation">Various Locations</span></p>
+    <p>Duration: <span id="eventDuration">3 days</span></p>
+    <p>RSVP by <span id="rsvpDate">June 25th</span></p>
+    <div class="theme-toggle">
+      <button onclick="setTheme('img/2.png')">Sunny Beach</button>
+      <button onclick="setTheme('img/3.png')">Mountain Adventure</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setTheme(image) {
+    localStorage.setItem('selectedTheme', image);
+    window.location.href = 'rsvp.html';
+  }
+
+  document.querySelectorAll('.theme-toggle button').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.add('active');
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 300);
+    });
+  });
+</script>
+
+</body>
+</html>

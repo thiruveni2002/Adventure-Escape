@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Form</title>
+
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .rsvp-section {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .rsvp-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.6) 100%);
+    z-index: 1;
+    pointer-events: none;
+    animation: animateBackground 8s linear infinite;
+  }
+  @keyframes animateBackground {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .rsvp-section h1 {
+    color: #007bff;
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+  }
+  .form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 30px;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    font-family: 'Roboto', sans-serif;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .confirmation-message {
+    display: none;
+    color: green;
+    margin-top: 20px;
+  }
+  #attendeeCount {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #007bff;
+    font-weight: 700;
+  }
+  #countdown {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #ff0000;
+    text-align: center;
+    font-weight: 700;
+  }
+  .social-icons {
+    display: none;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+  .social-icons a {
+    text-decoration: none;
+  }
+  .social-icons img {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    transition: transform 0.3s ease;
+  }
+  .social-icons img:hover {
+    transform: scale(1.2);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="rsvp-section">
+    <h1>RSVP</h1>
+    <form id="rsvpForm">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <p id="attendeeCount">Attendees: 0</p>
+    <p id="countdown">Countdown: </p>
+    <p class="confirmation-message">Thank you for your RSVP! See you at the event.</p>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://example.com" target="_blank"><img src="img/facebook_icon.png" alt="Facebook"></a>
+      <a href="https://twitter.com/share?url=http://example.com&text=Join%20us%20for%20an%20exciting%20event!" target="_blank"><img src="img/twitter_icon.png" alt="Twitter"></a>
+      <a href="https://api.whatsapp.com/send?text=Join%20us%20for%20an%20exciting%20event!%20http://example.com" target="_blank"><img src="img/whatsapp_icon.png" alt="WhatsApp">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://example.com&title=Join%20us%20for%20an%20exciting%20event!" target="_blank"><img src="img/linkedin_icon.png" alt="LinkedIn"></a>
+    
+</a>
+
+</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('rsvpForm');
+    const confirmationMessage = document.querySelector('.confirmation-message');
+    const attendeeCountElement = document.getElementById('attendeeCount');
+    const countdownElement = document.getElementById('countdown');
+    const socialIcons = document.querySelector('.social-icons');
+    
+    // Load the selected theme
+    const selectedTheme = localStorage.getItem('selectedTheme');
+    if (selectedTheme) {
+      document.body.style.backgroundImage = `url('${selectedTheme}')`;
+    }
+
+    let attendees = 0;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      if (name && email) {
+        attendees += 1;
+        attendeeCountElement.textContent = `Attendees: ${attendees}`;
+        confirmationMessage.style.display = 'block';
+        form.reset();
+        socialIcons.style.display = 'flex';
+
+        setTimeout(() => {
+          confirmationMessage.style.display = 'none';
+        }, 3000);
+      }
+    });
+
+    function updateCountdown() {
+      const eventDate = new Date('July 1, 2024 00:00:00').getTime();
+      const now = new Date().getTime();
+      const distance = eventDate - now;
+
+      if (distance < 0) {
+        countdownElement.textContent = "The event has started!";
+        clearInterval(countdownInterval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.textContent = `Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  });
+</script>
+
+</body>
+</html>
